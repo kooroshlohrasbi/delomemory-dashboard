@@ -152,29 +152,31 @@ export default function AnalyticsPage() {
             {loadingUsers ? (
               <Skeleton className="h-[300px] w-full" />
             ) : userStats && userStats.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={userStats} layout="vertical">
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-border"
-                    horizontal={false}
-                  />
-                  <XAxis type="number" fontSize={12} allowDecimals={false} />
-                  <YAxis
-                    dataKey="user"
-                    type="category"
-                    fontSize={12}
-                    width={80}
-                    tickLine={false}
-                  />
-                  <Tooltip />
-                  <Bar
-                    dataKey="queries"
-                    fill="var(--color-chart-1)"
-                    radius={[0, 4, 4, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+              <div role="img" aria-label="Bar chart showing queries by user in the last 30 days">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={userStats} layout="vertical">
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                      horizontal={false}
+                    />
+                    <XAxis type="number" fontSize={12} allowDecimals={false} />
+                    <YAxis
+                      dataKey="user"
+                      type="category"
+                      fontSize={12}
+                      width={80}
+                      tickLine={false}
+                    />
+                    <Tooltip />
+                    <Bar
+                      dataKey="queries"
+                      fill="var(--color-chart-1)"
+                      radius={[0, 4, 4, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                 No user data available
@@ -192,29 +194,31 @@ export default function AnalyticsPage() {
             {loadingTools ? (
               <Skeleton className="h-[300px] w-full" />
             ) : toolStats && toolStats.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={toolStats}
-                    dataKey="count"
-                    nameKey="tool"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    label={({ tool }) => tool}
-                    fontSize={12}
-                  >
-                    {toolStats.map((_, i) => (
-                      <Cell
-                        key={i}
-                        fill={CHART_COLORS[i % CHART_COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+              <div role="img" aria-label="Pie chart showing query distribution by tool">
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={toolStats}
+                      dataKey="count"
+                      nameKey="tool"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={100}
+                      label={({ tool }) => tool}
+                      fontSize={12}
+                    >
+                      {toolStats.map((_, i) => (
+                        <Cell
+                          key={i}
+                          fill={CHART_COLORS[i % CHART_COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                 No tool data available
@@ -232,36 +236,38 @@ export default function AnalyticsPage() {
             {loadingTrend ? (
               <Skeleton className="h-[300px] w-full" />
             ) : timeTrend && timeTrend.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={timeTrend}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-border"
-                  />
-                  <XAxis
-                    dataKey="date"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    interval="preserveStartEnd"
-                  />
-                  <YAxis
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    unit="ms"
-                  />
-                  <Tooltip formatter={(value: number) => `${value}ms`} />
-                  <Line
-                    type="monotone"
-                    dataKey="avg_ms"
-                    stroke="var(--color-chart-2)"
-                    strokeWidth={2}
-                    dot={false}
-                    name="Avg response time"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <div role="img" aria-label="Line chart showing average response time trend over the last 30 days">
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={timeTrend}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                    />
+                    <XAxis
+                      dataKey="date"
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      interval="preserveStartEnd"
+                    />
+                    <YAxis
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      unit="ms"
+                    />
+                    <Tooltip formatter={(value: number) => `${value}ms`} />
+                    <Line
+                      type="monotone"
+                      dataKey="avg_ms"
+                      stroke="var(--color-chart-2)"
+                      strokeWidth={2}
+                      dot={false}
+                      name="Avg response time"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                 No timing data available
@@ -279,34 +285,36 @@ export default function AnalyticsPage() {
             {loadingEntities ? (
               <Skeleton className="h-[300px] w-full" />
             ) : entityStats && entityStats.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={entityStats}>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-border"
-                  />
-                  <XAxis
-                    dataKey="entity"
-                    fontSize={11}
-                    tickLine={false}
-                    angle={-45}
-                    textAnchor="end"
-                    height={80}
-                  />
-                  <YAxis
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                    allowDecimals={false}
-                  />
-                  <Tooltip />
-                  <Bar
-                    dataKey="connections"
-                    fill="var(--color-chart-3)"
-                    radius={[4, 4, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+              <div role="img" aria-label="Bar chart showing top entities by connection count">
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={entityStats}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                    />
+                    <XAxis
+                      dataKey="entity"
+                      fontSize={11}
+                      tickLine={false}
+                      angle={-45}
+                      textAnchor="end"
+                      height={80}
+                    />
+                    <YAxis
+                      fontSize={12}
+                      tickLine={false}
+                      axisLine={false}
+                      allowDecimals={false}
+                    />
+                    <Tooltip />
+                    <Bar
+                      dataKey="connections"
+                      fill="var(--color-chart-3)"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[300px] text-muted-foreground">
                 No entity graph data available

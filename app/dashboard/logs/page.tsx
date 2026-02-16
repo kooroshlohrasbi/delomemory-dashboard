@@ -65,28 +65,30 @@ export default function LogsPage() {
 
       {/* Tool filter */}
       <div className="flex flex-wrap gap-2">
-        <Badge
+        <Button
           variant={toolFilter === null ? 'default' : 'outline'}
-          className="cursor-pointer"
+          size="sm"
+          className="rounded-full"
           onClick={() => {
             setToolFilter(null)
             setPage(0)
           }}
         >
           All
-        </Badge>
+        </Button>
         {tools?.map((tool) => (
-          <Badge
+          <Button
             key={tool}
             variant={toolFilter === tool ? 'default' : 'outline'}
-            className="cursor-pointer"
+            size="sm"
+            className="rounded-full"
             onClick={() => {
               setToolFilter(tool)
               setPage(0)
             }}
           >
             {tool}
-          </Badge>
+          </Button>
         ))}
       </div>
 
@@ -170,6 +172,7 @@ export default function LogsPage() {
                     size="sm"
                     disabled={page === 0}
                     onClick={() => setPage((p) => p - 1)}
+                    aria-label="Previous page"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
@@ -178,6 +181,7 @@ export default function LogsPage() {
                     size="sm"
                     disabled={page + 1 >= totalPages}
                     onClick={() => setPage((p) => p + 1)}
+                    aria-label="Next page"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>

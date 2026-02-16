@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from '@/lib/hooks/use-user'
 import { cn } from '@/lib/utils'
@@ -11,8 +12,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import {
   Brain,
@@ -22,6 +25,9 @@ import {
   Settings,
   LogOut,
   Menu,
+  Sun,
+  Moon,
+  Laptop,
 } from 'lucide-react'
 
 const navItems = [
@@ -66,6 +72,7 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
 
 function UserMenu() {
   const { user } = useUser()
+  const { theme, setTheme } = useTheme()
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -94,6 +101,31 @@ function UserMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
+        <DropdownMenuItem className="cursor-default p-3 hover:bg-transparent focus:bg-transparent">
+          <div className="flex w-full flex-col gap-2">
+            <ToggleGroup
+              type="single"
+              value={theme}
+              onValueChange={(value) => value && setTheme(value)}
+              className="w-full justify-between"
+              size="sm"
+            >
+              <ToggleGroupItem value="light" aria-label="Light" className="cursor-pointer">
+                <Sun className="h-4 w-4" />
+                <span className="ml-1 text-xs">Light</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem value="dark" aria-label="Dark" className="cursor-pointer">
+                <Moon className="h-4 w-4" />
+                <span className="ml-1 text-xs">Dark</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem value="system" aria-label="System" className="cursor-pointer">
+                <Laptop className="h-4 w-4" />
+                <span className="ml-1 text-xs">System</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
@@ -126,7 +158,7 @@ export function DashboardNav() {
         </div>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Open navigation menu">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
