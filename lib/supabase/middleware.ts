@@ -50,6 +50,7 @@ export async function updateSession(request: NextRequest) {
   // Block /dashboard/settings for non-L4 users
   if (user && request.nextUrl.pathname === '/dashboard/settings') {
     const { data } = await supabase
+      .schema('delomemory')
       .from('api_keys')
       .select('access_level')
       .eq('user_email', user.email)

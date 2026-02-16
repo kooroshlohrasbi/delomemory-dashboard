@@ -1,14 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Loader2, Brain } from 'lucide-react'
+import { Loader2, Brain, AlertCircle } from 'lucide-react'
 
-export default function LoginPage() {
+function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const searchParams = useSearchParams()
+
+  // Check for error from auth callback redirect
+  useEffect(() => {
+    const errorParam = searchParams.get('error')
+    if (errorParam) {
+      const errorMessages: Record<string, string> = {
+        'auth-code-error': 'Authentication failed. Please try again.',
+        'server-error': 'Server error during authentication. Please try again.',
+        'access-denied': 'Access denied. Please use a Predelo email address.',
+      }
+      setError(errorMessages[errorParam] || 'Authentication failed. Please try again.')
+    }
+  }, [searchParams])
 
   const handleSignIn = async () => {
     setLoading(true)
@@ -56,7 +71,10 @@ export default function LoginPage() {
             Sign in with Microsoft
           </Button>
           {error && (
-            <p className="text-sm text-destructive text-center">{error}</p>
+            <div className="flex items-center gap-2 p-3 rounded-md bg-destructive/10 text-destructive text-sm">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <p>{error}</p>
+            </div>
           )}
           <p className="text-xs text-muted-foreground text-center">
             Predelo internal users only (@predelo.io)
@@ -64,5 +82,17 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
