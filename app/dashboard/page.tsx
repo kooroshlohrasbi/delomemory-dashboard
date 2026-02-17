@@ -76,10 +76,10 @@ export default function DashboardPage() {
       const { data } = await supabase
         .schema('delomemory')
         .from('access_audit_log')
-        .select('user_email')
+        .select('user_id')
         .gte('timestamp', sevenDaysAgo)
       if (!data) return 0
-      return new Set(data.map((r) => r.user_email)).size
+      return new Set(data.map((r) => r.user_id)).size
     }
   )
 

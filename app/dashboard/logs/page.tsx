@@ -133,7 +133,7 @@ export default function LogsPage() {
                           )}
                         </TableCell>
                         <TableCell className="text-sm">
-                          {row.user_email?.split('@')[0] ?? 'unknown'}
+                          {row.user_id ?? 'unknown'}
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary">{row.tool_name}</Badge>

@@ -115,10 +115,10 @@ export default function SettingsPage() {
                     {apiKeys.map((key) => (
                       <TableRow key={key.id}>
                         <TableCell className="font-medium">
-                          {key.user_name ?? key.user_email?.split('@')[0]}
+                          {key.user_id}
                         </TableCell>
                         <TableCell className="text-sm">
-                          {key.user_email}
+                          {key.user_id}
                         </TableCell>
                         <TableCell>
                           <Badge

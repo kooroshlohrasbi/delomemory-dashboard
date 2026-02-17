@@ -53,7 +53,7 @@ export async function updateSession(request: NextRequest) {
       .schema('delomemory')
       .from('api_keys')
       .select('access_level')
-      .eq('user_email', user.email)
+      .eq('user_id', (user.email ?? '').split('@')[0])
       .single()
 
     if (!data || data.access_level < 4) {

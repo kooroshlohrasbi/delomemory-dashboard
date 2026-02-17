@@ -38,13 +38,13 @@ export default function AnalyticsPage() {
       const { data } = await supabase
         .schema('delomemory')
         .from('access_audit_log')
-        .select('user_email')
+        .select('user_id')
         .gte('timestamp', thirtyDaysAgo)
 
       if (!data) return []
       const counts: Record<string, number> = {}
       data.forEach((r) => {
-        const name = r.user_email?.split('@')[0] ?? 'unknown'
+        const name = r.user_id ?? 'unknown'
         counts[name] = (counts[name] ?? 0) + 1
       })
       return Object.entries(counts)
