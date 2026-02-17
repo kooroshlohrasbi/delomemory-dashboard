@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
         .schema('delomemory')
         .from('access_audit_log')
         .select('user_id')
-        .gte('timestamp', thirtyDaysAgo)
+        .gte('created_at', thirtyDaysAgo)
 
       if (!data) return []
       const counts: Record<string, number> = {}
@@ -62,7 +62,7 @@ export default function AnalyticsPage() {
         .schema('delomemory')
         .from('access_audit_log')
         .select('tool_name')
-        .gte('timestamp', thirtyDaysAgo)
+        .gte('created_at', thirtyDaysAgo)
 
       if (!data) return []
       const counts: Record<string, number> = {}
@@ -83,10 +83,10 @@ export default function AnalyticsPage() {
       const { data } = await supabase
         .schema('delomemory')
         .from('access_audit_log')
-        .select('timestamp, duration_ms')
-        .gte('timestamp', thirtyDaysAgo)
-        .not('duration_ms', 'is', null)
-        .order('timestamp', { ascending: true })
+        .select('created_at, query_time_ms')
+        .gte('created_at', thirtyDaysAgo)
+        .not('query_time_ms', 'is', null)
+        .order('created_at', { ascending: true })
 
       if (!data || data.length === 0) return []
 
@@ -96,9 +96,9 @@ export default function AnalyticsPage() {
         grouped[day] = { sum: 0, count: 0 }
       }
       data.forEach((row) => {
-        const day = format(new Date(row.timestamp), 'yyyy-MM-dd')
+        const day = format(new Date(row.created_at), 'yyyy-MM-dd')
         if (grouped[day]) {
-          grouped[day].sum += row.duration_ms ?? 0
+          grouped[day].sum += row.query_time_ms ?? 0
           grouped[day].count++
         }
       })

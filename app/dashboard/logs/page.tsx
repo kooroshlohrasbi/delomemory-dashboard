@@ -30,7 +30,7 @@ export default function LogsPage() {
         .schema('delomemory')
         .from('access_audit_log')
         .select('*', { count: 'exact' })
-        .order('timestamp', { ascending: false })
+        .order('created_at', { ascending: false })
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1)
 
       if (toolFilter) {
@@ -128,7 +128,7 @@ export default function LogsPage() {
                       <TableRow key={i}>
                         <TableCell className="whitespace-nowrap text-sm">
                           {format(
-                            new Date(row.timestamp),
+                            new Date(row.created_at),
                             'MMM d, HH:mm:ss'
                           )}
                         </TableCell>
@@ -142,17 +142,17 @@ export default function LogsPage() {
                           {row.query_text ?? '-'}
                         </TableCell>
                         <TableCell className="text-right text-sm">
-                          {row.duration_ms != null
-                            ? `${row.duration_ms}ms`
+                          {row.query_time_ms != null
+                            ? `${row.query_time_ms}ms`
                             : '-'}
                         </TableCell>
                         <TableCell>
                           <Badge
                             variant={
-                              row.access_granted ? 'default' : 'destructive'
+                              row.access_level > 0 ? 'default' : 'destructive'
                             }
                           >
-                            {row.access_granted ? 'OK' : 'DENIED'}
+                            {row.access_level > 0 ? 'OK' : 'DENIED'}
                           </Badge>
                         </TableCell>
                       </TableRow>

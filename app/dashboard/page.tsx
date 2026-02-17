@@ -64,7 +64,7 @@ export default function DashboardPage() {
         .schema('delomemory')
         .from('access_audit_log')
         .select('*', { count: 'exact', head: true })
-        .gte('timestamp', sevenDaysAgo)
+        .gte('created_at', sevenDaysAgo)
       return count ?? 0
     }
   )
@@ -77,7 +77,7 @@ export default function DashboardPage() {
         .schema('delomemory')
         .from('access_audit_log')
         .select('user_id')
-        .gte('timestamp', sevenDaysAgo)
+        .gte('created_at', sevenDaysAgo)
       if (!data) return 0
       return new Set(data.map((r) => r.user_id)).size
     }
@@ -90,12 +90,12 @@ export default function DashboardPage() {
       const { data } = await supabase
         .schema('delomemory')
         .from('access_audit_log')
-        .select('duration_ms')
-        .gte('timestamp', sevenDaysAgo)
-        .not('duration_ms', 'is', null)
+        .select('query_time_ms')
+        .gte('created_at', sevenDaysAgo)
+        .not('query_time_ms', 'is', null)
       if (!data || data.length === 0) return 'N/A'
       const avg =
-        data.reduce((sum, r) => sum + (r.duration_ms ?? 0), 0) / data.length
+        data.reduce((sum, r) => sum + (r.query_time_ms ?? 0), 0) / data.length
       return `${Math.round(avg)}ms`
     }
   )
@@ -119,9 +119,9 @@ export default function DashboardPage() {
       const { data } = await supabase
         .schema('delomemory')
         .from('access_audit_log')
-        .select('timestamp')
-        .gte('timestamp', thirtyDaysAgo)
-        .order('timestamp', { ascending: true })
+        .select('created_at')
+        .gte('created_at', thirtyDaysAgo)
+        .order('created_at', { ascending: true })
 
       if (!data || data.length === 0) return []
 
@@ -132,7 +132,7 @@ export default function DashboardPage() {
         grouped[day] = 0
       }
       data.forEach((row) => {
-        const day = format(new Date(row.timestamp), 'yyyy-MM-dd')
+        const day = format(new Date(row.created_at), 'yyyy-MM-dd')
         if (grouped[day] !== undefined) grouped[day]++
       })
 
