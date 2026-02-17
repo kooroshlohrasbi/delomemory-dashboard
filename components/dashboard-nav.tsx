@@ -28,44 +28,83 @@ import {
   Sun,
   Moon,
   Laptop,
+  Search,
+  CircleDot,
+  LayoutGrid,
+  GitBranch,
+  Key,
+  MessageSquare,
+  DollarSign,
 } from 'lucide-react'
 
-const navItems = [
-  { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
-  { href: '/dashboard/logs', label: 'Query Logs', icon: ScrollText },
-  { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ className?: string }> }
+type NavSection = { title: string; items: NavItem[] }
+
+const navSections: NavSection[] = [
+  {
+    title: 'Explore',
+    items: [
+      { href: '/dashboard/playground', label: 'Playground', icon: Search },
+      { href: '/dashboard/entities', label: 'Entities', icon: CircleDot },
+      { href: '/dashboard/coverage', label: 'Coverage', icon: LayoutGrid },
+      { href: '/dashboard/graph', label: 'Graph', icon: GitBranch },
+    ],
+  },
+  {
+    title: 'Monitor',
+    items: [
+      { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+      { href: '/dashboard/logs', label: 'Query Logs', icon: ScrollText },
+      { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
+    ],
+  },
+  {
+    title: 'Manage',
+    items: [
+      { href: '/dashboard/keys', label: 'API Keys', icon: Key },
+      { href: '/dashboard/feedback', label: 'Feedback', icon: MessageSquare },
+      { href: '/dashboard/costs', label: 'Costs', icon: DollarSign },
+      { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+    ],
+  },
 ]
 
 function NavLinks({ onClick }: { onClick?: () => void }) {
   const pathname = usePathname()
 
   return (
-    <nav className="flex flex-col gap-1">
-      {navItems.map((item) => {
-        const Icon = item.icon
-        const isActive =
-          item.href === '/dashboard'
-            ? pathname === '/dashboard'
-            : pathname.startsWith(item.href)
+    <nav className="flex flex-col gap-4">
+      {navSections.map((section) => (
+        <div key={section.title} className="flex flex-col gap-1">
+          <span className="px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground/60">
+            {section.title}
+          </span>
+          {section.items.map((item) => {
+            const Icon = item.icon
+            const isActive =
+              item.href === '/dashboard'
+                ? pathname === '/dashboard'
+                : pathname.startsWith(item.href)
 
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={onClick}
-            className={cn(
-              'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              isActive
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-            )}
-          >
-            <Icon className="h-4 w-4" />
-            {item.label}
-          </Link>
-        )
-      })}
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClick}
+                className={cn(
+                  'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            )
+          })}
+        </div>
+      ))}
     </nav>
   )
 }

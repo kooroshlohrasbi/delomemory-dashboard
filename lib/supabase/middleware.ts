@@ -47,8 +47,9 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Block /dashboard/settings for non-L4 users
-  if (user && request.nextUrl.pathname === '/dashboard/settings') {
+  // Block L4-only pages for non-L4 users
+  const l4OnlyPaths = ['/dashboard/settings', '/dashboard/costs', '/dashboard/feedback']
+  if (user && l4OnlyPaths.includes(request.nextUrl.pathname)) {
     const { data } = await supabase
       .schema('delomemory')
       .from('api_keys')
